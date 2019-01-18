@@ -1,0 +1,219 @@
+<html><head>
+<title>
+Splay/
+</title>
+<meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" id="viewport" name="viewport">
+
+<style>
+body, html {
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  touch-action: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+#content {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  text-align: center;
+}
+
+#content.show {
+  z-index: 10;
+}
+
+#address {
+  white-space: nowrap;
+  font-family: 'Helvetica Neue',sans-serif;
+  font-size: 0.80em;
+  line-height: 1.5em;
+  #letter-spacing: 0.02em;
+  color: #999;
+  text-align: center;
+  margin-top: 2em;
+  font-style: bold;
+  text-transform: normal;
+ }
+a {
+  color: #999;
+  text-decoration: underline;
+}
+a:hover {
+  color: black;
+  text-decoration: underline;
+}
+#instagram_svg {
+  transform: scale(1.2);
+}
+
+#instagram_link {
+  display: inline-block;
+  padding: 0 30px 30px 30px; /* Bigger tap area */
+}
+
+#svg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 4;
+  background: white;
+  transition: opacity 500ms;
+}
+#svg.hide {
+  pointer-events: none;
+  opacity: 0;
+}
+
+circle {
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  animation: pulse 2000ms ease-in-out;
+  animation-iteration-count: infinite;
+  transition: stroke 1000ms ease-in-out;
+}
+
+@keyframes pulse {
+  0% {transform: scale(.9, 1); fill: white; }
+  50% {transform: scale(1.0,0.1); fill: #dedede}
+  100% {transform: scale(1, 1);}
+}
+
+
+@media only screen and (min-device-width: 1024px) {
+  #instagram_svg:hover path {
+    fill: black !important;
+  }
+}
+
+@media only screen and (max-device-width: 1024px)
+  #address {
+    font-size: 0.9em;
+  }
+  #instagram_svg:active path {
+    fill: black !important;
+  }
+
+}
+
+
+</style>
+
+</head>
+
+<body id="body">
+
+
+<div id="content" class="hide">
+  <img src="splay.svg" width="65">
+  <div id="address">
+    </div>
+
+</div>
+
+<svg id="svg" height="969" width="1365" class="hide"><circle fill="white" r="2400" cx="960" cy="484.5" id="circle_24" style="animation-delay: 2.4s"></circle><circle fill="white" r="2300" cx="960" cy="484.5" id="circle_23" style="animation-delay: 2.3s"></circle><circle fill="white" r="2200" cx="960" cy="484.5" id="circle_22" style="animation-delay: 2.2s"></circle><circle fill="white" r="2100" cx="960" cy="484.5" id="circle_21" style="animation-delay: 2.1s"></circle><circle fill="white" r="2000" cx="960" cy="484.5" id="circle_20" style="animation-delay: 2s"></circle><circle fill="white" r="1900" cx="960" cy="484.5" id="circle_19" style="animation-delay: 1.9s"></circle><circle fill="white" r="1800" cx="960" cy="484.5" id="circle_18" style="animation-delay: 1.8s"></circle><circle fill="white" r="1700" cx="960" cy="484.5" id="circle_17" style="animation-delay: 1.7s"></circle><circle fill="white" r="1600" cx="960" cy="484.5" id="circle_16" style="animation-delay: 1.6s"></circle><circle fill="white" r="1500" cx="960" cy="484.5" id="circle_15" style="animation-delay: 1.5s"></circle><circle fill="white" r="1400" cx="682.5" cy="484.5" id="circle_14" style="animation-delay: 1.4s"></circle><circle fill="white" r="1300" cx="682.5" cy="484.5" id="circle_13" style="animation-delay: 1.3s"></circle><circle fill="white" r="1200" cx="682.5" cy="484.5" id="circle_12" style="animation-delay: 1.2s"></circle><circle fill="white" r="1100" cx="682.5" cy="484.5" id="circle_11" style="animation-delay: 1.1s"></circle><circle fill="white" r="1000" cx="682.5" cy="484.5" id="circle_10" style="animation-delay: 1s"></circle><circle fill="white" r="900" cx="682.5" cy="484.5" id="circle_9" style="animation-delay: 0.9s"></circle><circle fill="white" r="800" cx="682.5" cy="484.5" id="circle_8" style="animation-delay: 0.8s"></circle><circle fill="white" r="700" cx="682.5" cy="484.5" id="circle_7" style="animation-delay: 0.7s"></circle><circle fill="white" r="600" cx="682.5" cy="484.5" id="circle_6" style="animation-delay: 0.6s"></circle><circle fill="white" r="500" cx="682.5" cy="484.5" id="circle_5" style="animation-delay: 0.5s"></circle><circle fill="white" r="400" cx="682.5" cy="484.5" id="circle_4" style="animation-delay: 0.4s"></circle><circle fill="white" r="300" cx="682.5" cy="484.5" id="circle_3" style="animation-delay: 0.3s"></circle><circle fill="white" r="200" cx="682.5" cy="484.5" id="circle_2" style="animation-delay: 0.2s"></circle><circle fill="white" r="100" cx="682.5" cy="484.5" id="circle_1" style="animation-delay: 0.1s"></circle></svg>
+
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script>
+
+  function getRandomArbitary (min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  function getRandomInt (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  var circles = [];
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  var minLength = Math.max.apply(null, [width, height]);
+  minLength *= 2;
+  var numRings = 25;
+  var widthPerRing = minLength/numRings;
+  if(widthPerRing < 300 && width > 1000){ widthPerRing = 200; } 
+  var svg = document.getElementById('svg');
+  svg.setAttribute('height', height);
+  svg.setAttribute('width', width);
+  var colors = ["#999999", "#636363", "#636363", "#313131"];
+  for(var i = numRings - 1; i > 0; i--){
+    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("fill", 'white');
+    circle.setAttribute("r", (i * widthPerRing)/2);
+    circle.setAttribute("cx", width/2);
+    circle.setAttribute("cy", height/2);
+    circle.setAttribute("id", "circle_" + i);
+    circle.setAttribute('style', "animation-delay: " + (i/10) + 's');
+    svg.appendChild(circle);
+    circles.push(circle);
+  }
+
+  function toggle(){
+    if(svg.getAttribute('class') == 'hide'){
+      document.getElementById('content').setAttribute('class', '');
+      svg.setAttribute('class', '');
+    } else {
+      svg.setAttribute('class', 'hide');
+      document.getElementById('content').setAttribute('class', 'hide');
+    }
+  }
+
+  var touchCapable = 'ontouchstart' in window ||
+    window.DocumentTouch && document instanceof window.DocumentTouch ||
+    navigator.maxTouchPoints > 0 ||
+    window.navigator.msMaxTouchPoints > 0;
+
+  
+  document.getElementById('body').addEventListener((touchCapable ? 'touchstart' : 'click'), function(e){
+    e.stopPropagation();;
+    if(e.target.tagName == 'IMG' || e.target.tagName == 'path' || e.target.tagName == 'A' || e.target.id == 'instagram_svg'){
+
+    } else {
+      e.preventDefault();
+      toggle();
+    }
+  });
+
+
+  window.addEventListener('resize', function(){
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var minLength = Math.max.apply(null, [width, height]);
+    minLength *= 2;
+    var numRings = 15;
+    var widthPerRing = minLength/numRings;
+    if(widthPerRing < 200 && width > 1000){ widthPerRing = 200; } // Don't let the center get too small.
+    var svg = document.getElementById('svg');
+    svg.setAttribute('height', height);
+    svg.setAttribute('width', width);
+    for(var i = 1; i < numRings; i++){
+      var c = document.getElementById('circle_' + (i))
+      c.setAttribute("r", (i * widthPerRing)/2);
+      c.setAttribute("cx", width/2);
+      c.setAttribute("cy", height/2);
+    }
+
+  });
+
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-104557-6']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+</body></html>
